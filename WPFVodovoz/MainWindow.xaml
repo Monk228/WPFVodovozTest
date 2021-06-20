@@ -1,0 +1,281 @@
+﻿<Window x:Class="WPFVodovoz.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFVodovoz"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="Text">
+            <Setter Property="TextBlock.Margin" Value="5"/>
+            <Setter Property="TextBlock.FontSize" Value="14"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource Text}" TargetType="TextBlock"></Style>
+
+        <Style x:Key="BoldText" BasedOn="{StaticResource Text}">
+            <Setter Property="TextBlock.FontWeight" Value="DemiBold"/>
+        </Style>
+    </Window.Resources>
+    <TabControl x:Name="Control">
+
+        <TabItem x:Name="Employees">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Height="10" Width="10" Fill="Black" />
+                    <TextBlock Margin="3">Сотрудники</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Padding="5">
+                    <ListBox ItemsSource="{Binding Employees}" x:Name="emplList" SelectedItem="{Binding SelectedEmployee}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding FirstName}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding LastName}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding Patronymic}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding BirthDate}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding Gender}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding Department}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+                <Border Grid.Column="1" Margin="5">
+                    <StackPanel x:Name="EmplEditPanel" DataContext="{Binding SelectedEmployee}">
+                        <TextBlock Text="Редактировать работника" TextAlignment="Center" FontSize="16" Style="{StaticResource BoldText}"/>
+                        <TextBlock Visibility="Hidden"></TextBlock>
+                        <DockPanel IsEnabled="False" x:Name="firstNamePanel">
+                            <TextBlock Text="FirstName: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="firstName" Text="{Binding FirstName}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="lastNamePanel">
+                            <TextBlock Text="LastName: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="lastName" Text="{Binding LastName}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="patrPanel">
+                            <TextBlock Text="Patronymic: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="patronymic" Text="{Binding Patronymic}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="BirthdatePanel">
+                            <TextBlock Text="BirthDate: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="birthDate" Text="{Binding BirthDate}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="GenderPanel">
+                            <TextBlock Text="Gender: " Style="{StaticResource BoldText}"/>
+                            <ComboBox HorizontalAlignment="Right" x:Name="genderCombo" Text="{Binding Gender}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="DepPanelEmployee">
+                            <TextBlock Text="Department: " Style="{StaticResource BoldText}"/>
+                            <ComboBox HorizontalAlignment="Right" x:Name="depCombo" Text="{Binding Department}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Button Click="ChangeEmpl" VerticalAlignment="Bottom" Height="30" HorizontalAlignment="Left"  Content="Изменить запись" Margin="0,30,0,0"/>
+                            <Button Click="DeleteEmpl" VerticalAlignment="Bottom" Height="30"  HorizontalAlignment="Right"  Content="Удалить запись" Margin="0,30,0,0"/>
+                        </DockPanel>
+                    </StackPanel>
+                    
+                </Border>
+                <Border Grid.Column="2" Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="Создать работника" TextAlignment="Center" FontSize="16" Style="{StaticResource BoldText}"></TextBlock>
+                        <TextBlock x:Name="Error" Visibility="Hidden"></TextBlock>
+                        <DockPanel  x:Name="createfirstNamePanel">
+                            <TextBlock Text="FirstName: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="createfirstName" Text="{Binding FirstName}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel  x:Name="createlastNamePanel">
+                            <TextBlock Text="LastName: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="createlastName" Text="{Binding LastName}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel  x:Name="createpatrPanel">
+                            <TextBlock Text="Patronymic: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="createpatronymic" Text="{Binding Patronymic}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel  x:Name="createBirthdatePanel">
+                            <TextBlock Text="BirthDate: " Style="{StaticResource BoldText}"/>
+                            <TextBox HorizontalAlignment="Right" x:Name="createbirthDate" Text="{Binding BirthDate}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel  x:Name="createGenderPanel">
+                            <TextBlock Text="Gender: " Style="{StaticResource BoldText}"/>
+                            <ComboBox HorizontalAlignment="Right" x:Name="creategenderCombo" Text="{Binding Gender}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel x:Name="createDepPanelEmployee">
+                            <TextBlock Text="Department: " Style="{StaticResource BoldText}"/>
+                            <ComboBox HorizontalAlignment="Right" x:Name="createdepCombo" Text="{Binding Department}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <Button Click="SaveEmpl" Height="30" HorizontalAlignment="Right"  Content="Сохранить запись" Margin="0,30,0,0"/>
+                        </DockPanel>
+
+
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </TabItem>
+
+        <TabItem x:Name="Departments">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Height="10" Width="10" Fill="Black" />
+                    <TextBlock Margin="3">Департаменты</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Padding="5">
+                    <ListBox  x:Name="DepList" ItemsSource="{Binding Departments}" SelectedItem="{Binding SelectedDepartment}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding Director}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+                <Border Grid.Column="1" Margin="5">
+                    <StackPanel DataContext="{Binding SelectedDepartment}">
+                        <TextBlock Text="Редактировать департамент" TextAlignment="Center" FontSize="16" Style="{StaticResource BoldText}"/>
+                        <TextBlock Visibility="Hidden"></TextBlock>
+                        <DockPanel IsEnabled="False" x:Name="IdPanel">
+                            <TextBlock Text="Id: " Style="{StaticResource BoldText}"/>
+                            <TextBox x:Name="Id" Text="{Binding Id}" Width="150" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="EditPanelDep">
+                            <TextBlock Text="Title: " Style="{StaticResource BoldText}"/>
+                            <TextBox x:Name="TitleText" Text="{Binding Title}" Width="150" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="EditPanelDep2" Margin="0,5,0,0">
+                            <TextBlock HorizontalAlignment="Left"  Text="Director: " Style="{StaticResource BoldText}" Width="59"/>
+                            <ComboBox HorizontalAlignment="Right"  Text="{Binding Director}" x:Name="directorList" Width="150" Margin="0,5,0,0"></ComboBox>
+
+                        </DockPanel>
+                        <DockPanel>
+                            <Button Click="ChangeDep" VerticalAlignment="Bottom" Height="30" HorizontalAlignment="Left"  Content="Изменить запись" Margin="0,30,0,0"/>
+                            <Button Click="DeleteDep" VerticalAlignment="Bottom" Height="30"  HorizontalAlignment="Right"  Content="Удалить запись" Margin="0,30,0,0"/>
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="Создать департамент" TextAlignment="Center" FontSize="16" Style="{StaticResource BoldText}"/>
+                        <TextBlock x:Name="Error2" Visibility="Hidden"></TextBlock>
+                        <DockPanel>
+                            <TextBlock Text="Title: "/>
+                            <TextBox x:Name="CreateTitleText" Text="" Width="150" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                            <DockPanel x:Name="CreateDirectorPanel">
+                            <TextBlock HorizontalAlignment="Right" Text="Director:"></TextBlock>
+                            <ComboBox HorizontalAlignment="Right"  Text="" x:Name="createDirectorList" Width="150" Margin="0,5,0,0"></ComboBox>
+                        </DockPanel>
+                        <DockPanel>
+                            <Button Click="SaveDep" HorizontalAlignment="Right" Height="30"   Content="Сохранить запись" Margin="0,10,0,0"/>
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </TabItem>
+
+        <TabItem x:Name="Orders">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Height="10" Width="10" Fill="Black" />
+                    <TextBlock Margin="3">Заказы</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Padding="5">
+                    <ListBox x:Name="orderList" ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Number}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding Contractor}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding OrderDate}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                    <TextBlock Text="{Binding Author}" FontSize="16" FontWeight="DemiBold" Background="{x:Null}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+                <Border Grid.Column="1" Margin="5">
+                    <StackPanel DataContext="{Binding SelectedOrder}">
+                        <TextBlock  Text="Редактировать заказ" TextAlignment="Center" FontSize="16" Style="{StaticResource BoldText}"/>
+                        <TextBlock Visibility="Hidden"></TextBlock>
+                        <DockPanel IsEnabled="False" x:Name="NumPanel">
+                            <TextBlock Text="Number: " Style="{StaticResource BoldText}"/>
+                            <TextBox  x:Name="NumText" HorizontalAlignment="Right" Text="{Binding Number}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="ContractorPanel">
+                            <TextBlock Text="Contractor: " Style="{StaticResource BoldText}"/>
+                            <TextBox x:Name="ContractorText" HorizontalAlignment="Right" Text="{Binding Contractor}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="DatePanel">
+                            <TextBlock Text="OrderDate: " Style="{StaticResource BoldText}"/>
+                            <TextBox x:Name="OrderDateText" HorizontalAlignment="Right" Text="{Binding OrderDate}" Width="150"/>
+                        </DockPanel>
+                        <DockPanel IsEnabled="False" x:Name="AuthorPanel">
+                            <TextBlock Text="Author: " Style="{StaticResource BoldText}"/>
+                            <ComboBox x:Name="authorCombo"  HorizontalAlignment="Right" Text="{Binding Author}" Width="150" />
+                        </DockPanel>
+                        <DockPanel>
+                            <Button VerticalAlignment="Bottom" Content="Удалить запись" Click="DeleteOrder" Height="30" HorizontalAlignment="Left" Margin="0,30,0,0"></Button>
+                            <Button HorizontalAlignment="Right" Click="ChangeOrder" VerticalAlignment="Bottom" Height="30" Content="Изменить запись" Margin="0,30,0,0"/>
+
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="Создать заказ" TextAlignment="Center" FontSize="16" Style="{StaticResource BoldText}"/>
+                        <TextBlock x:Name="Error3" Visibility="Hidden"></TextBlock>
+                        <DockPanel x:Name="createNumPanel">
+                            <TextBlock HorizontalAlignment="Right" Text="Number: " Style="{StaticResource BoldText}"/>
+                            <TextBox  x:Name="createNum" HorizontalAlignment="Right" Text="" Width="150"/>
+                        </DockPanel>
+                        <DockPanel x:Name="createContractorPanel">
+                            <TextBlock HorizontalAlignment="Right" Text="Contractor: " Style="{StaticResource BoldText}"/>
+                            <TextBox x:Name="createContractor"  HorizontalAlignment="Right" Text="" Width="150"/>
+                        </DockPanel>
+                        <DockPanel x:Name="createDatePanel">
+                            <TextBlock HorizontalAlignment="Right" Text="OrderDate: " Style="{StaticResource BoldText}"/>
+                            <TextBox x:Name="creatDateOrder" HorizontalAlignment="Right" Text="" Width="150"/>
+                        </DockPanel>
+                        <DockPanel x:Name="createAuthorPanel">
+                            <TextBlock HorizontalAlignment="Right" Text="Author: " Style="{StaticResource BoldText}"/>
+                            <ComboBox x:Name="createCombAuthor" HorizontalAlignment="Right" Text="" Width="150" />
+                        </DockPanel>
+                        <DockPanel>
+                            <Button Click="SaveOrder" HorizontalAlignment="Right" Height="30"   Content="Сохранить запись" Margin="0,10,0,0"/>
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </TabItem>
+
+    </TabControl>
+</Window>
